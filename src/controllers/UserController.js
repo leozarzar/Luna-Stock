@@ -2,22 +2,96 @@ const UserService = require('../services/UserService.js');
 
 class UserController{
 
-    static async addUser(req,res){
-        
+    static async getAllUsers(req,res){
+
         try{
-    
-            const {nome,email,senha} = req.body;
 
-            const created = await UserService.createNewUser({nome,email,senha});
+            const users = await UserService.getAllUsers();
 
-            if(created) res.status(200).json("Usuário cadastrado com sucesso.");
-            else res.status(409).json("Conflito 409 - Usuário já possui cadastro!");
+            res.status(200).json(users);
         }
         catch(error){
 
-            res.status(500).json(`${error} - Erro no servidor - Não foi possível cadastrar usuário.`);
+            res.status(500).json(`${error}`);
+        }
+    }
+
+    static async getUser(req,res){
+
+        try{
+
+            const {id} = req.params;
+
+            const user = await UserService.getUser(id);
+
+            res.status(200).json(user);
+        }
+        catch(error){
+
+            res.status(500).json(`${error}`);
+        }
+    }
+
+    static async addUser(req,res){
+        
+        try{
+
+            await UserService.createNewUser(req.body);
+
+            res.status(200).json("Usuário cadastrado com sucesso.");
+        }
+        catch(error){
+
+            res.status(500).json(`${error}`);
         }
 
+    }
+
+    static async updateUser(req,res){
+        
+        try{
+
+            const {id} = req.params;
+            
+            await UserService.updateUser(req.body,id);
+
+            res.status(200).json("Usuário atualizado com sucesso.");
+        }
+        catch(error){
+
+            res.status(500).json(`${error}`);
+        }
+
+    }
+
+    static async deleteUser(req,res){
+
+        try{
+
+            const {id} = req.params;
+
+            await UserService.deleteUser(id);
+
+            res.status(200).json("Usuário deletado com sucesso.");
+        }
+        catch(error){
+
+            res.status(500).json(`${error}`);
+        }
+    }
+
+    static async deleteAllUsers(req,res){
+
+        try{
+
+            await UserService.deleteAllUsers();
+
+            res.status(200).json("Usuários deletados com sucesso.");
+        }
+        catch(error){
+
+            res.status(500).json(`${error}`);
+        }
     }
 
 }

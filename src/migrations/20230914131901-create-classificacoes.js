@@ -5,9 +5,9 @@ module.exports = {
     await queryInterface.createTable('classificações', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUID
       },
       nome: {
         type: Sequelize.STRING
@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       classificação: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {model: "classificações",key:"id"}
       },
       createdAt: {

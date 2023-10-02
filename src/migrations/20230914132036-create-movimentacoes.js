@@ -5,13 +5,13 @@ module.exports = {
     await queryInterface.createTable('movimentações', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUID
       },
       produto_id: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {model: "produtos",key:"id"}
       },
       quantidade: {
