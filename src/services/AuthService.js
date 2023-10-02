@@ -5,22 +5,21 @@ const auth = require('../config/jsonSecret.js');
 
 class AuthService {
 
-    static async login(dto){
+    static async login(data){
         
         const user = await db.users.findOne({
-            attributes: ['id', 'email', 'senha_hash'],
+            attributes: ['id', 'email', 'senha_hash','role_id'],
             where:{
-                email: dto.email
+                email: data.email
             }
         });
 
-        if(user === null) return null;
-
-        if( ! await compare(dto.password, user.senha_hash) ) return null;
+        if(user === null || !await compare(data.password, user.senha_hash) ) throw new Error("Usuário ou senha inválidos!");
 
         const accessToken = sign({
             id: user.id,
-            email: user.email
+            email: user.email,
+            role: user.role_id
         },auth.secret,{
             expiresIn: 86400
         });
